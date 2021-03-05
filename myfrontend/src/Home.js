@@ -9,9 +9,6 @@ const useStyles = makeStyles((theme) => ({
   root: {
     height: "100vh",
   },
-  dropdownStyle: {
-    boxShadow: "gold",
-  },
 }));
 
 export default function Home() {
