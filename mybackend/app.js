@@ -46,6 +46,25 @@ app.get("/getByCategory", (req, res) => {
   );
 });
 
+app.get("/search", (req, res) => {
+  const { query, category } = req.query;
+  request(
+    `https://api.chucknorris.io/jokes/search?query=${query}`,
+    function (err, response, body) {
+      if (!err && response.statusCode == 200) {
+        var parsedBody = JSON.parse(body);
+        var jokes = [];
+        category
+          ? (jokes = parsedBody["result"].filter(
+              (value) => value.categories == category
+            ))
+          : (jokes = parsedBody["result"]);
+        res.send({ jokes });
+      }
+    }
+  );
+});
+
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`);
 });

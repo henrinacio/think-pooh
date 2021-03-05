@@ -19,10 +19,6 @@ export default function Home() {
       <Card>
         <CardContent>
           <Categories />
-        </CardContent>
-      </Card>
-      <Card>
-        <CardContent>
           <Random />
         </CardContent>
       </Card>
