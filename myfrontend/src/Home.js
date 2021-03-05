@@ -16,7 +16,7 @@ const useStyles = makeStyles((theme) => ({
 export default function Home() {
   const classes = useStyles();
   const [list, setList] = useState([]);
-  const [categoryName, setCategoryName] = useState([]);
+  const [categoryName, setCategoryName] = useState("");
 
   useEffect(() => {
     axios
