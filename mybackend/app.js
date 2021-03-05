@@ -9,7 +9,7 @@ app.get("/", (req, res) => {
 
 app.get("/getCategories", (req, res) => {
   request(
-    "https://api.chucknorris.io/jokes/categories",
+    `https://api.chucknorris.io/jokes/categories`,
     function (error, response, body) {
       if (!error && response.statusCode == 200) {
         var categories = JSON.parse(body);
@@ -21,12 +21,26 @@ app.get("/getCategories", (req, res) => {
 
 app.get("/getRandom", (req, res) => {
   request(
-    "https://api.chucknorris.io/jokes/random",
+    `https://api.chucknorris.io/jokes/random`,
     function (error, response, body) {
       if (!error && response.statusCode == 200) {
         var parsedBody = JSON.parse(body);
         var random_joke = parsedBody["value"];
         res.send({ random_joke });
+      }
+    }
+  );
+});
+
+app.get("/getByCategory", (req, res) => {
+  const { category } = req.query;
+  request(
+    `https://api.chucknorris.io/jokes/random?category=${category}`,
+    function (err, response, body) {
+      if (!err && response.statusCode == 200) {
+        var parsedBody = JSON.parse(body);
+        var joke = parsedBody["value"];
+        res.send({ joke });
       }
     }
   );
