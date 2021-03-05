@@ -23,7 +23,6 @@ export default function Home() {
       .get("/getCategories")
       .then((response) => {
         setList(response.data.categories);
-        console.log(response.data.categories);
       })
       .catch((e) => {
         console.log(e.response.data);
@@ -40,7 +39,6 @@ export default function Home() {
       <FormControl>
         <InputLabel id="category-label">Category</InputLabel>
         <Select
-          defaultValue=""
           labelId="category-label"
           id="category"
           value={categoryName}
