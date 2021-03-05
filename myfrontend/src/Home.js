@@ -5,11 +5,17 @@ import FormControl from "@material-ui/core/FormControl";
 import InputLabel from "@material-ui/core/InputLabel";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
+import Card from "@material-ui/core/Card";
+import CardContent from "@material-ui/core/CardContent";
+import Random from "./components/Random";
 import axios from "axios";
 
 const useStyles = makeStyles((theme) => ({
   root: {
     height: "100vh",
+  },
+  dropdownStyle: {
+    boxShadow: "gold",
   },
 }));
 
@@ -51,6 +57,11 @@ export default function Home() {
           ))}
         </Select>
       </FormControl>
+      <Card>
+        <CardContent>
+          <Random />
+        </CardContent>
+      </Card>
     </div>
   );
 }
