@@ -1,5 +1,8 @@
 import React from "react";
-import { ThemeProvider, createMuiTheme } from "@material-ui/core";
+import {
+  ThemeProvider,
+  unstable_createMuiStrictModeTheme as createMuiTheme,
+} from "@material-ui/core";
 import Home from "./Home";
 
 function App() {
