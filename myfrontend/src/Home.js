@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import Card from "@material-ui/core/Card";
-import CardContent from "@material-ui/core/CardContent";
+import Grid from "@material-ui/core/Grid";
 import TextField from "@material-ui/core/TextField";
 import FormControl from "@material-ui/core/FormControl";
 import InputLabel from "@material-ui/core/InputLabel";
@@ -11,7 +10,9 @@ import axios from "axios";
 
 const useStyles = makeStyles((theme) => ({
   root: {
+    padding: theme.spacing(2),
     height: "100vh",
+    flexGrow: 1,
   },
 }));
 
@@ -50,9 +51,11 @@ export default function Home() {
 
   return (
     <div className={classes.root}>
-      <Card>
-        <CardContent>
+      <Grid container spacing={3}>
+        <Grid item xs={12} sm={6}>
           <TextField id="search" label="Search"></TextField>
+        </Grid>
+        <Grid item xs={12} sm={6}>
           <FormControl>
             <InputLabel id="category-label">Category</InputLabel>
             <Select
@@ -68,9 +71,11 @@ export default function Home() {
               ))}
             </Select>
           </FormControl>
+        </Grid>
+        <Grid item xs={12}>
           {randomJoke}
-        </CardContent>
-      </Card>
+        </Grid>
+      </Grid>
     </div>
   );
 }
