@@ -59,6 +59,7 @@ const useStyles = makeStyles((theme) => ({
     height: "40px",
     fontWeight: "bold",
     textTransform: "none",
+    boxShadow: "0 3px 5px 0px rgba(0, 204, 126, 0.25)",
   },
 }));
 
