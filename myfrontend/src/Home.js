@@ -32,7 +32,6 @@ const useStyles = makeStyles((theme) => ({
   menuPaper: {
     maxHeight: 330,
     borderRadius: "10px",
-    boxShadow: "0 3 12 0 'rgba(62,69,87,0,25)'",
   },
   "@global": {
     "*::-webkit-scrollbar": {
