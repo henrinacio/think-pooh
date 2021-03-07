@@ -124,8 +124,8 @@ export default function Home() {
   return (
     <div className={classes.root}>
       <Container maxWidth="sm">
-        <Grid container spacing={3} justify="center">
-          <Grid item xs={12} sm={6} direction="row">
+        <Grid container spacing={3}>
+          <Grid item xs={12} sm={6}>
             <TextField
               fullWidth={true}
               id="search"
@@ -134,7 +134,7 @@ export default function Home() {
               onChange={(e) => setSearch(e.target.value)}
             ></TextField>
           </Grid>
-          <Grid item xs={12} sm={6} direction="row">
+          <Grid item xs={12} sm={6}>
             <FormControl fullWidth={true}>
               <InputLabel id="category-label">Category</InputLabel>
               <Select
@@ -158,23 +158,15 @@ export default function Home() {
               </Select>
             </FormControl>
           </Grid>
-          <Grid
-            container
-            justify="center"
-            direction="column"
-            spacing={3}
-            alignItems="center"
-          >
-            <Grid item xs={12}>
-              <Button onClick={handleAddJoke}>Get a new random fact!</Button>
-            </Grid>
-            <Grid item xs={12}>
-              <List>
-                {jokesList.map((jokes) => (
-                  <ListItem key={jokes}>{jokes}</ListItem>
-                ))}
-              </List>
-            </Grid>
+          <Grid item xs={12}>
+            <Button onClick={handleAddJoke}>Get a new random fact!</Button>
+          </Grid>
+          <Grid item xs={12}>
+            <List>
+              {jokesList.map((jokes) => (
+                <ListItem key={jokes}>{jokes}</ListItem>
+              ))}
+            </List>
           </Grid>
         </Grid>
       </Container>
