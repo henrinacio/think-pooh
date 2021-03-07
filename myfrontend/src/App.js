@@ -8,7 +8,7 @@ import Home from "./Home";
 function App() {
   const theme = createMuiTheme({
     palette: {
-      primary: { main: "#3F51B5" },
+      primary: { main: "#48CCCC" },
     },
   });
 
