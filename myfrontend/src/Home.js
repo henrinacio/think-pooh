@@ -16,6 +16,7 @@ import axios from "axios";
 const useStyles = makeStyles((theme) => ({
   root: {
     padding: theme.spacing(2),
+    backgroundColor: theme.palette.background.paper,
     height: "100vh",
     flexGrow: 1,
     fontFamily: "'Mulish', 'Arial', sans-serif",
@@ -61,7 +62,7 @@ const useStyles = makeStyles((theme) => ({
     fontFamily: "'Mulish', 'Arial', sans-serif",
     borderRadius: "3px",
     color: "black",
-    width: "245px",
+    maxWidth: "245px",
     height: "40px",
     fontWeight: "bold",
     textTransform: "none",
