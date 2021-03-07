@@ -54,6 +54,12 @@ const useStyles = makeStyles((theme) => ({
       height: "5%",
     },
   },
+  button: {
+    width: "245px",
+    height: "40px",
+    fontWeight: "bold",
+    textTransform: "none",
+  },
 }));
 
 export default function Home() {
@@ -160,6 +166,7 @@ export default function Home() {
           </Grid>
           <Grid item xs={12}>
             <Button
+              classes={{ root: classes.button }}
               variant="contained"
               color="secondary"
               onClick={handleAddJoke}
