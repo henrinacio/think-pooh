@@ -159,7 +159,13 @@ export default function Home() {
             </FormControl>
           </Grid>
           <Grid item xs={12}>
-            <Button onClick={handleAddJoke}>Get a new random fact!</Button>
+            <Button
+              variant="contained"
+              color="secondary"
+              onClick={handleAddJoke}
+            >
+              Get a new random fact!
+            </Button>
           </Grid>
           <Grid item xs={12}>
             <List>
