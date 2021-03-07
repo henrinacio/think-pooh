@@ -14,6 +14,41 @@ const useStyles = makeStyles((theme) => ({
     height: "100vh",
     flexGrow: 1,
   },
+  menu: {
+    "&$selected": {
+      backgroundColor: "transparent",
+      "&:hover": {
+        backgroundColor: "#DAF1F2",
+      },
+    },
+    "&:hover": {
+      backgroundColor: "#DAF1F2",
+    },
+  },
+  selected: {},
+  menuPaper: {
+    maxHeight: 330,
+    borderRadius: "10px",
+  },
+  "@global": {
+    "*::-webkit-scrollbar": {
+      width: "4px",
+    },
+    "*::-webkit-scrollbar-track": {
+      boxShadow: "inset 0 0 6px #DAF1F2",
+      borderRadius: "2px",
+    },
+    "*::-webkit-scrollbar-thumb": {
+      backgroundColor: "#48CCCC",
+      borderRadius: "2px",
+    },
+    "*::-webkit-scrollbar-button:start:decrement": {
+      height: "5%",
+    },
+    "*::-webkit-scrollbar-button:end:increment": {
+      height: "5%",
+    },
+  },
 }));
 
 export default function Home() {
@@ -63,9 +98,16 @@ export default function Home() {
               id="category"
               value={categoryName}
               onChange={handleChange}
+              MenuProps={{
+                classes: { paper: classes.menuPaper },
+              }}
             >
               {list.map((item) => (
-                <MenuItem key={item} value={item}>
+                <MenuItem
+                  key={item}
+                  value={item}
+                  classes={{ root: classes.menu, selected: classes.selected }}
+                >
                   {item}
                 </MenuItem>
               ))}
