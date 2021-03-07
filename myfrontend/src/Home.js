@@ -7,12 +7,14 @@ import InputLabel from "@material-ui/core/InputLabel";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
 import axios from "axios";
+import "@fontsource/mulish";
 
 const useStyles = makeStyles((theme) => ({
   root: {
     padding: theme.spacing(2),
     height: "100vh",
     flexGrow: 1,
+    fontFamily: "Mulish",
   },
   menu: {
     "&$selected": {
@@ -115,7 +117,7 @@ export default function Home() {
           </FormControl>
         </Grid>
         <Grid item xs={12}>
-          {randomJoke}
+          <h4>{randomJoke}</h4>
         </Grid>
       </Grid>
     </div>
