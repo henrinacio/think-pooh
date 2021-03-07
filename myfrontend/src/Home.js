@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
+import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
 import TextField from "@material-ui/core/TextField";
 import FormControl from "@material-ui/core/FormControl";
@@ -31,6 +32,7 @@ const useStyles = makeStyles((theme) => ({
   menuPaper: {
     maxHeight: 330,
     borderRadius: "10px",
+    boxShadow: "0 3 12 0 'rgba(62,69,87,0,25)'",
   },
   "@global": {
     "*::-webkit-scrollbar": {
@@ -88,38 +90,42 @@ export default function Home() {
 
   return (
     <div className={classes.root}>
-      <Grid container spacing={3}>
-        <Grid item xs={12} sm={6}>
-          <TextField id="search" label="Search"></TextField>
+      <Container maxWidth="sm">
+        <Grid container justify="center" spacing={3}>
+          <Grid item xs={12} sm={6}>
+            <TextField id="search" label="Search"></TextField>
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <FormControl>
+              <InputLabel id="category-label">Category</InputLabel>
+              <Select
+                labelId="category-label"
+                id="category"
+                value={categoryName}
+                onChange={handleChange}
+                MenuProps={{
+                  classes: { paper: classes.menuPaper },
+                }}
+              >
+                {list.map((item) => (
+                  <MenuItem
+                    key={item}
+                    value={item}
+                    classes={{ root: classes.menu, selected: classes.selected }}
+                  >
+                    {item}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </Grid>
         </Grid>
-        <Grid item xs={12} sm={6}>
-          <FormControl>
-            <InputLabel id="category-label">Category</InputLabel>
-            <Select
-              labelId="category-label"
-              id="category"
-              value={categoryName}
-              onChange={handleChange}
-              MenuProps={{
-                classes: { paper: classes.menuPaper },
-              }}
-            >
-              {list.map((item) => (
-                <MenuItem
-                  key={item}
-                  value={item}
-                  classes={{ root: classes.menu, selected: classes.selected }}
-                >
-                  {item}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
+        <Grid container>
+          <Grid item xs={12}>
+            <h4>{randomJoke}</h4>
+          </Grid>
         </Grid>
-        <Grid item xs={12}>
-          <h4>{randomJoke}</h4>
-        </Grid>
-      </Grid>
+      </Container>
     </div>
   );
 }
