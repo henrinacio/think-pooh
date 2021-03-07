@@ -10,6 +10,7 @@ import MenuItem from "@material-ui/core/MenuItem";
 import Button from "@material-ui/core/Button";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
+import "@fontsource/mulish";
 import axios from "axios";
 
 const useStyles = makeStyles((theme) => ({
@@ -20,6 +21,7 @@ const useStyles = makeStyles((theme) => ({
     fontFamily: "'Mulish', 'Arial', sans-serif",
   },
   menu: {
+    fontFamily: "'Mulish', 'Arial', sans-serif",
     "&$selected": {
       backgroundColor: "transparent",
       "&:hover": {
@@ -55,11 +57,19 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   button: {
+    background: "#25EFA1",
+    fontFamily: "'Mulish', 'Arial', sans-serif",
+    borderRadius: "3px",
+    color: "black",
     width: "245px",
     height: "40px",
     fontWeight: "bold",
     textTransform: "none",
     boxShadow: "0 3px 5px 0px rgba(0, 204, 126, 0.25)",
+    "&:hover": {
+      backgroundColor: "#25EFA1",
+      boxShadow: "0 3px 5px 0px rgba(0, 204, 126, 0.25)",
+    },
   },
 }));
 
@@ -131,7 +141,7 @@ export default function Home() {
   return (
     <div className={classes.root}>
       <Container maxWidth="sm">
-        <Grid container spacing={3}>
+        <Grid container spacing={3} style={{ textAlign: "center" }}>
           <Grid item xs={12} sm={6}>
             <TextField
               fullWidth={true}
@@ -157,7 +167,10 @@ export default function Home() {
                   <MenuItem
                     key={item}
                     value={item}
-                    classes={{ root: classes.menu, selected: classes.selected }}
+                    classes={{
+                      root: classes.menu,
+                      selected: classes.selected,
+                    }}
                   >
                     {item}
                   </MenuItem>
@@ -165,16 +178,17 @@ export default function Home() {
               </Select>
             </FormControl>
           </Grid>
+
           <Grid item xs={12}>
             <Button
               classes={{ root: classes.button }}
               variant="contained"
-              color="secondary"
               onClick={handleAddJoke}
             >
               Get a new random fact!
             </Button>
           </Grid>
+
           <Grid item xs={12}>
             <List>
               {jokesList.map((jokes) => (
