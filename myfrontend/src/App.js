@@ -12,7 +12,7 @@ function App() {
       primary: { main: "#48CCCC" },
     },
     typography: {
-      fontFamily: "Mulish",
+      fontFamily: "'Mulish', 'Arial', sans-serif",
     },
   });
 

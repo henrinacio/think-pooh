@@ -15,7 +15,7 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(2),
     height: "100vh",
     flexGrow: 1,
-    fontFamily: "Mulish",
+    fontFamily: "'Mulish', 'Arial', sans-serif",
   },
   menu: {
     "&$selected": {
@@ -93,10 +93,10 @@ export default function Home() {
       <Container maxWidth="sm">
         <Grid container justify="center" spacing={3}>
           <Grid item xs={12} sm={6}>
-            <TextField id="search" label="Search"></TextField>
+            <TextField fullWidth={true} id="search" label="Search"></TextField>
           </Grid>
           <Grid item xs={12} sm={6}>
-            <FormControl>
+            <FormControl fullWidth={true}>
               <InputLabel id="category-label">Category</InputLabel>
               <Select
                 labelId="category-label"
@@ -119,8 +119,6 @@ export default function Home() {
               </Select>
             </FormControl>
           </Grid>
-        </Grid>
-        <Grid container>
           <Grid item xs={12}>
             <h4>{randomJoke}</h4>
           </Grid>
