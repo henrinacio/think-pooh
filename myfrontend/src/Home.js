@@ -7,8 +7,10 @@ import FormControl from "@material-ui/core/FormControl";
 import InputLabel from "@material-ui/core/InputLabel";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
+import Button from "@material-ui/core/Button";
+import List from "@material-ui/core/List";
+import ListItem from "@material-ui/core/ListItem";
 import axios from "axios";
-import "@fontsource/mulish";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -59,7 +61,9 @@ export default function Home() {
 
   const [list, setList] = useState([]);
   const [categoryName, setCategoryName] = useState("");
-  const [randomJoke, setRandomJoke] = useState("");
+  // const [randomJoke, setRandomJoke] = useState("");
+  const [search, setSearch] = useState("");
+  const [jokesList, setJokesList] = useState([]);
 
   useEffect(() => {
     axios
@@ -72,29 +76,65 @@ export default function Home() {
       });
   }, []);
 
-  useEffect(() => {
-    axios
-      .get("/getRandom")
-      .then((response) => {
-        setRandomJoke(response.data.random_joke);
-      })
-      .catch((e) => {
-        console.log(e.response.data);
-      });
-  }, []);
-
   const handleChange = (event) => {
     setCategoryName(event.target.value);
   };
 
+  // useEffect(() => {
+  //   axios
+  //     .get("/getRandom")
+  //     .then((response) => {
+  //       setRandomJoke(response.data.random_joke);
+  //     })
+  //     .catch((e) => {
+  //       console.log(e.response.data);
+  //     });
+  // }, []);
+
+  async function handleAddJoke() {
+    if (categoryName === "" && search === "") {
+      const response = await axios.get("/getRandom");
+      console.log(response.data.random_joke);
+
+      const joke = response.data.random_joke;
+      setJokesList([...jokesList, joke]);
+    } else if (search && categoryName) {
+      // se a categoria for escolhida
+      const response = await axios.get("/search", {
+        params: {
+          query: search,
+          category: categoryName,
+        },
+      });
+
+      console.log(response.data.value);
+    } else if (search && categoryName === "") {
+      // se nenhuma categoria for escolhida
+      const response = await axios.get("/search", {
+        params: {
+          query: search,
+          category: "",
+        },
+      });
+
+      console.log(response.data);
+    }
+  }
+
   return (
     <div className={classes.root}>
       <Container maxWidth="sm">
-        <Grid container justify="center" spacing={3}>
-          <Grid item xs={12} sm={6}>
-            <TextField fullWidth={true} id="search" label="Search"></TextField>
+        <Grid container spacing={3} justify="center">
+          <Grid item xs={12} sm={6} direction="row">
+            <TextField
+              fullWidth={true}
+              id="search"
+              label="Search"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+            ></TextField>
           </Grid>
-          <Grid item xs={12} sm={6}>
+          <Grid item xs={12} sm={6} direction="row">
             <FormControl fullWidth={true}>
               <InputLabel id="category-label">Category</InputLabel>
               <Select
@@ -118,8 +158,23 @@ export default function Home() {
               </Select>
             </FormControl>
           </Grid>
-          <Grid item xs={12}>
-            <h4>{randomJoke}</h4>
+          <Grid
+            container
+            justify="center"
+            direction="column"
+            spacing={3}
+            alignItems="center"
+          >
+            <Grid item xs={12}>
+              <Button onClick={handleAddJoke}>Get a new random fact!</Button>
+            </Grid>
+            <Grid item xs={12}>
+              <List>
+                {jokesList.map((jokes) => (
+                  <ListItem key={jokes}>{jokes}</ListItem>
+                ))}
+              </List>
+            </Grid>
           </Grid>
         </Grid>
       </Container>
