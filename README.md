@@ -19,8 +19,7 @@ Verify you have everything installed correctly:
 ```sh
 node --version
 ```
-The NPM package manager is automatically installed together with Node,\
-but we will be using Yarn because is a faster alternative. So, get [Yarn](https://yarnpkg.com/) installed on your machine.\
+Get [Yarn](https://yarnpkg.com/) installed on your machine. It's faster than the NPM package manager installed together with node.\
 Verify you have everything installed correctly:
 ```sh
 yarn -v
