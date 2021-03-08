@@ -72,6 +72,7 @@ export default function App() {
   const [search, setSearch] = useState("");
   const [jokesList, setJokesList] = useState([]);
 
+  // busca e renderiza as categorias para serem colocadas no Select
   useEffect(() => {
     axios
       .get("/getCategories")
@@ -95,11 +96,11 @@ export default function App() {
     axios
       .get("/getRandom")
       .then((response) => {
-        const joke = response.data.random_joke;
+        const joke = response.data.ranm_joke;
         setJokesList([joke]);
       })
-      .catch((e) => {
-        console.log(e.response.data);
+      .catch((err) => {
+        console.log(err);
       });
   }, []);
 
@@ -112,8 +113,8 @@ export default function App() {
           const joke = response.data.random_joke;
           setJokesList([joke]);
         })
-        .catch((e) => {
-          console.log(e.response.data);
+        .catch((err) => {
+          console.log(err);
         });
     } else if (search && categoryName) {
       await axios
@@ -127,8 +128,8 @@ export default function App() {
           const values = response.data.jokes.map((item) => item.value);
           setJokesList(values);
         })
-        .catch((e) => {
-          console.log(e.response.data);
+        .catch((err) => {
+          console.log(err);
         });
     } else if (search && categoryName === "") {
       await axios
@@ -142,8 +143,8 @@ export default function App() {
           const values = response.data.jokes.map((item) => item.value);
           setJokesList(values);
         })
-        .catch((e) => {
-          console.log(e.response.data);
+        .catch((err) => {
+          console.log(err);
         });
     }
   }
