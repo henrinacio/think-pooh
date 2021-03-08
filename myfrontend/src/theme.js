@@ -8,7 +8,6 @@ const theme = createMuiTheme({
   typography: {
     fontFamily: ["Mulish"],
     button: {
-      fontOpticalSizing: "16px",
       fontWeight: "700",
       textTransform: "none",
     },

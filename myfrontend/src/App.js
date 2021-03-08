@@ -70,7 +70,6 @@ export default function App() {
 
   const [list, setList] = useState([]);
   const [categoryName, setCategoryName] = useState("");
-  // const [randomJoke, setRandomJoke] = useState("");
   const [search, setSearch] = useState("");
   const [jokesList, setJokesList] = useState([]);
 
@@ -88,17 +87,6 @@ export default function App() {
   const handleChange = (event) => {
     setCategoryName(event.target.value);
   };
-
-  // useEffect(() => {
-  //   axios
-  //     .get("/getRandom")
-  //     .then((response) => {
-  //       setRandomJoke(response.data.random_joke);
-  //     })
-  //     .catch((e) => {
-  //       console.log(e.response.data);
-  //     });
-  // }, []);
 
   async function handleAddJoke() {
     if (categoryName === "" && search === "") {
