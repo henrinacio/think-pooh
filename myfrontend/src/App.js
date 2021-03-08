@@ -12,31 +12,6 @@ import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import axios from "axios";
 
-// const useStyles = makeStyles((theme) => ({
-//   root: {
-//     padding: theme.spacing(2),
-//     backgroundColor: theme.palette.background.paper,
-//   },
-//
-//
-//
-//   button: {
-//     background: "#25EFA1",
-
-//     borderRadius: "3px",
-//     color: "black",
-//     maxWidth: "245px",
-//     height: "40px",
-//     fontWeight: "bold",
-//     textTransform: "none",
-//     boxShadow: "0 3px 5px 0px rgba(0, 204, 126, 0.25)",
-//     "&:hover": {
-//       backgroundColor: "#25EFA1",
-//       boxShadow: "0 3px 5px 0px rgba(0, 204, 126, 0.25)",
-//     },
-//   },
-// }));
-
 const useStyles = makeStyles({
   // estiliza o botão
   button: {
@@ -128,30 +103,33 @@ export default function App() {
   async function handleAddJoke() {
     if (categoryName === "" && search === "") {
       const response = await axios.get("/getRandom");
-      console.log(response.data.random_joke);
+      // console.log(response.data.random_joke);
 
       const joke = response.data.random_joke;
-      setJokesList([...jokesList, joke]);
-    } else if (search && categoryName) {
-      // se a categoria for escolhida
+      setJokesList([joke]);
+    }
+    // se a categoria for escolhida
+    else if (search && categoryName) {
       const response = await axios.get("/search", {
         params: {
           query: search,
           category: categoryName,
         },
       });
-
-      console.log(response.data.value);
-    } else if (search && categoryName === "") {
-      // se nenhuma categoria for escolhida
+      const values = response.data.jokes.map((item) => item.value);
+      setJokesList(values);
+      // console.log(response.data.value);
+    } // se nenhuma categoria for escolhida
+    else if (search && categoryName === "") {
       const response = await axios.get("/search", {
         params: {
           query: search,
           category: "",
         },
       });
-
-      console.log(response.data);
+      const values = response.data.jokes.map((item) => item.value);
+      // console.log(values);
+      setJokesList(values);
     }
   }
 
