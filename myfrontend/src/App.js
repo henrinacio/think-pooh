@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
 import TextField from "@material-ui/core/TextField";
@@ -16,41 +17,9 @@ import axios from "axios";
 //     padding: theme.spacing(2),
 //     backgroundColor: theme.palette.background.paper,
 //   },
-//   menu: {
-//     "&$selected": {
-//       backgroundColor: "transparent",
-//       "&:hover": {
-//         backgroundColor: "#DAF1F2",
-//       },
-//     },
-//     "&:hover": {
-//       backgroundColor: "#DAF1F2",
-//     },
-//   },
-//   selected: {},
-//   menuPaper: {
-//     maxHeight: 330,
-//     borderRadius: "10px",
-//   },
-//   "@global": {
-//     "*::-webkit-scrollbar": {
-//       width: "4px",
-//     },
-//     "*::-webkit-scrollbar-track": {
-//       boxShadow: "inset 0 0 6px #DAF1F2",
-//       borderRadius: "2px",
-//     },
-//     "*::-webkit-scrollbar-thumb": {
-//       backgroundColor: "#48CCCC",
-//       borderRadius: "2px",
-//     },
-//     "*::-webkit-scrollbar-button:start:decrement": {
-//       height: "5%",
-//     },
-//     "*::-webkit-scrollbar-button:end:increment": {
-//       height: "5%",
-//     },
-//   },
+//
+//
+//
 //   button: {
 //     background: "#25EFA1",
 
@@ -68,8 +37,61 @@ import axios from "axios";
 //   },
 // }));
 
+const useStyles = makeStyles({
+  // estiliza o botão
+  button: {
+    left: "0px",
+    right: "0px",
+    height: "40px",
+    boxShadow: "0 3px 5px 0px rgba(0, 204, 126, 0.25)",
+  },
+  search: {
+    border: "rgba(118, 125, 150, 1)",
+  },
+  select: {
+    border: "rgba(118, 125, 150, 1)",
+  },
+  menuPaper: {
+    maxHeight: 330,
+    borderRadius: "10px",
+  },
+  // estiliza o background do menu ao selecionar e passar por cima o mouse
+  menu: {
+    "&$selected": {
+      backgroundColor: "transparent",
+      "&:hover": {
+        backgroundColor: "#DAF1F2",
+      },
+    },
+    "&:hover": {
+      backgroundColor: "#DAF1F2",
+    },
+  },
+  selected: {},
+  // estiliza o scroll globalmente
+  "@global": {
+    "*::-webkit-scrollbar": {
+      width: "4px",
+    },
+    "*::-webkit-scrollbar-track": {
+      boxShadow: "inset 0 0 6px #DAF1F2",
+      borderRadius: "2px",
+    },
+    "*::-webkit-scrollbar-thumb": {
+      backgroundColor: "#48CCCC",
+      borderRadius: "2px",
+    },
+    "*::-webkit-scrollbar-button:start:decrement": {
+      height: "5%",
+    },
+    "*::-webkit-scrollbar-button:end:increment": {
+      height: "5%",
+    },
+  },
+});
+
 export default function App() {
-  // const classes = useStyles();
+  const classes = useStyles();
 
   const [list, setList] = useState([]);
   const [categoryName, setCategoryName] = useState("");
@@ -139,6 +161,7 @@ export default function App() {
         <Grid container spacing={3} style={{ textAlign: "center" }}>
           <Grid item xs={12} sm={6}>
             <TextField
+              className={classes.search}
               fullWidth={true}
               id="search"
               label="Search"
@@ -150,23 +173,23 @@ export default function App() {
             <FormControl fullWidth={true}>
               <InputLabel id="category-label">Category</InputLabel>
               <Select
-                style={{ fontWeight: "bold" }}
+                style={{ fontWeight: "700" }}
                 labelId="category-label"
                 id="category"
                 value={categoryName}
                 onChange={handleChange}
-                // MenuProps={{
-                //   classes: { paper: classes.menuPaper },
-                // }}
+                MenuProps={{
+                  classes: { paper: classes.menuPaper },
+                }}
               >
                 {list.map((item) => (
                   <MenuItem
                     key={item}
                     value={item}
-                    // classes={{
-                    //   root: classes.menu,
-                    //   selected: classes.selected,
-                    // }}
+                    classes={{
+                      root: classes.menu,
+                      selected: classes.selected,
+                    }}
                   >
                     {item}
                   </MenuItem>
@@ -177,7 +200,8 @@ export default function App() {
 
           <Grid item xs={12}>
             <Button
-              // classes={{ root: classes.button }}
+              className={classes.button}
+              color="secondary"
               variant="contained"
               onClick={handleAddJoke}
             >
