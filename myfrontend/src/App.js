@@ -20,11 +20,10 @@ const useStyles = makeStyles({
     height: "40px",
     boxShadow: "0 3px 5px 0px rgba(0, 204, 126, 0.25)",
   },
-  search: {
-    border: "rgba(118, 125, 150, 1)",
-  },
+  search: {},
+  // estiliza o input
   select: {
-    border: "rgba(118, 125, 150, 1)",
+    fontWeight: "700",
   },
   menuPaper: {
     maxHeight: 330,
@@ -78,6 +77,9 @@ export default function App() {
       .get("/getCategories")
       .then((response) => {
         setList(response.data.categories);
+        let categories = response.data.categories;
+        categories.unshift("any");
+        setList(categories);
       })
       .catch((e) => {
         console.log(e.response.data);
@@ -88,36 +90,61 @@ export default function App() {
     setCategoryName(event.target.value);
   };
 
+  // renderiza uma joke random ao inicializar a
+  useEffect(() => {
+    axios
+      .get("/getRandom")
+      .then((response) => {
+        const joke = response.data.random_joke;
+        setJokesList([joke]);
+      })
+      .catch((e) => {
+        console.log(e.response.data);
+      });
+  }, []);
+
+  // função para renderizar as jokes
   async function handleAddJoke() {
     if (categoryName === "" && search === "") {
-      const response = await axios.get("/getRandom");
-      // console.log(response.data.random_joke);
-
-      const joke = response.data.random_joke;
-      setJokesList([joke]);
-    }
-    // se a categoria for escolhida
-    else if (search && categoryName) {
-      const response = await axios.get("/search", {
-        params: {
-          query: search,
-          category: categoryName,
-        },
-      });
-      const values = response.data.jokes.map((item) => item.value);
-      setJokesList(values);
-      // console.log(response.data.value);
-    } // se nenhuma categoria for escolhida
-    else if (search && categoryName === "") {
-      const response = await axios.get("/search", {
-        params: {
-          query: search,
-          category: "",
-        },
-      });
-      const values = response.data.jokes.map((item) => item.value);
-      // console.log(values);
-      setJokesList(values);
+      await axios
+        .get("/getRandom")
+        .then((response) => {
+          const joke = response.data.random_joke;
+          setJokesList([joke]);
+        })
+        .catch((e) => {
+          console.log(e.response.data);
+        });
+    } else if (search && categoryName) {
+      await axios
+        .get("/search", {
+          params: {
+            query: search,
+            category: categoryName,
+          },
+        })
+        .then((response) => {
+          const values = response.data.jokes.map((item) => item.value);
+          setJokesList(values);
+        })
+        .catch((e) => {
+          console.log(e.response.data);
+        });
+    } else if (search && categoryName === "") {
+      await axios
+        .get("/search", {
+          params: {
+            query: search,
+            category: "",
+          },
+        })
+        .then((response) => {
+          const values = response.data.jokes.map((item) => item.value);
+          setJokesList(values);
+        })
+        .catch((e) => {
+          console.log(e.response.data);
+        });
     }
   }
 
@@ -139,7 +166,7 @@ export default function App() {
             <FormControl fullWidth={true}>
               <InputLabel id="category-label">Category</InputLabel>
               <Select
-                style={{ fontWeight: "700" }}
+                className={classes.select}
                 labelId="category-label"
                 id="category"
                 value={categoryName}

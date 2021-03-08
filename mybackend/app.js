@@ -39,8 +39,8 @@ app.get("/getByCategory", (req, res) => {
     function (err, response, body) {
       if (!err && response.statusCode == 200) {
         var parsedBody = JSON.parse(body);
-        var joke = parsedBody["value"];
-        res.send({ joke });
+        var category_jokes = parsedBody["value"];
+        res.send({ category_jokes });
       }
     }
   );
