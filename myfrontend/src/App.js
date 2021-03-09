@@ -70,6 +70,13 @@ const useStyles = makeStyles({
         paddingLeft: 0,
         paddingRight: 0,
     },
+    snackWarning: {
+        background: 'rgba(242, 207, 61, 1)',
+        color: 'black',
+        maxWidth: '312px',
+        borderRadius: '10px',
+        maxHeight: '71px',
+    },
 });
 
 /**
@@ -94,6 +101,7 @@ export default function App() {
     const [search, setSearch] = useState('');
     const [jokesList, setJokesList] = useState([]);
     const [loading, setLoading] = useState(false);
+    const [openSnack, setOpenSnack] = useState(false);
 
     /**
      * Busca a lista de categórias na API e seta o state
@@ -101,13 +109,13 @@ export default function App() {
     useEffect(() => {
         axios
             .get('/getCategories')
-            .then(response => {
+            .then((response) => {
                 setList(response.data.categories);
                 let categories = response.data.categories;
                 categories.unshift('any');
                 setList(categories);
             })
-            .catch(err => {
+            .catch((err) => {
                 console.log(err);
             });
     }, []);
@@ -120,12 +128,12 @@ export default function App() {
             .get('/getRandom', {
                 onDownloadProgress: setLoading(true),
             })
-            .then(response => {
+            .then((response) => {
                 const joke = response.data.random_joke;
                 setJokesList([joke]);
                 setLoading(false);
             })
-            .catch(err => {
+            .catch((err) => {
                 console.log(err);
             });
     }, []);
@@ -133,8 +141,15 @@ export default function App() {
     /**
      * Arrow function para setar a categoria escolhida
      */
-    const handleChange = event => {
+    const handleChange = (event) => {
         setCategoryName(event.target.value);
+    };
+
+    const handleClose = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+        setOpenSnack(false);
     };
 
     /**
@@ -149,17 +164,17 @@ export default function App() {
                 .get('/getRandom', {
                     onDownloadProgress: setLoading(true),
                 })
-                .then(response => {
+                .then((response) => {
                     const joke = response.data.random_joke;
                     setJokesList([joke]);
                     setLoading(false);
                 })
-                .catch(err => {
+                .catch((err) => {
                     console.log(err);
                 });
         } else if (search === '' && categoryName) {
             /**
-             * Busca por categoria, retorna uma joke
+             * Busca sem inputs, por categoria, retorna uma random joke
              */
             await axios
                 .get('/getByCategory', {
@@ -168,12 +183,12 @@ export default function App() {
                     },
                     onDownloadProgress: setLoading(true),
                 })
-                .then(response => {
+                .then((response) => {
                     const joke = response.data.category_jokes;
                     setJokesList([joke]);
                     setLoading(false);
                 })
-                .catch(err => {
+                .catch((err) => {
                     console.log(err);
                 });
         } else if (search && categoryName !== 'any') {
@@ -188,12 +203,19 @@ export default function App() {
                     },
                     onDownloadProgress: setLoading(true),
                 })
-                .then(response => {
-                    const values = response.data.jokes.map(item => item.value);
-                    setJokesList(values);
-                    setLoading(false);
+                .then((response) => {
+                    const values = response.data.jokes.map(
+                        (item) => item.value,
+                    );
+                    if (values.length !== 0) {
+                        setJokesList(values);
+                        setLoading(false);
+                    } else {
+                        setOpenSnack(true);
+                        setLoading(false);
+                    }
                 })
-                .catch(err => {
+                .catch((err) => {
                     console.log(err);
                 });
         } else if (search && categoryName === 'any') {
@@ -208,12 +230,19 @@ export default function App() {
                     },
                     onDownloadProgress: setLoading(true),
                 })
-                .then(response => {
-                    const values = response.data.jokes.map(item => item.value);
-                    setJokesList(values);
-                    setLoading(false);
+                .then((response) => {
+                    const values = response.data.jokes.map(
+                        (item) => item.value,
+                    );
+                    if (values.length !== 0) {
+                        setJokesList(values);
+                        setLoading(false);
+                    } else {
+                        setOpenSnack(true);
+                        setLoading(false);
+                    }
                 })
-                .catch(err => {
+                .catch((err) => {
                     console.log(err);
                 });
         }
@@ -230,7 +259,7 @@ export default function App() {
                             id="search"
                             label="Search"
                             value={search}
-                            onChange={e => setSearch(e.target.value)}
+                            onChange={(e) => setSearch(e.target.value)}
                         ></TextField>
                     </Grid>
                     <Grid item xs={12} sm={6} style={{ textAlign: 'left' }}>
@@ -248,7 +277,7 @@ export default function App() {
                                     classes: { paper: classes.menuPaper },
                                 }}
                             >
-                                {list.map(item => (
+                                {list.map((item) => (
                                     <MenuItem
                                         key={item}
                                         value={item}
@@ -273,12 +302,27 @@ export default function App() {
                         >
                             Get a new random fact!
                         </Button>
+                        <Snackbar
+                            ContentProps={{
+                                classes: {
+                                    root: classes.snackWarning,
+                                },
+                            }}
+                            anchorOrigin={{
+                                vertical: 'bottom',
+                                horizontal: 'center',
+                            }}
+                            open={openSnack}
+                            onClose={handleClose}
+                            autoHideDuration={6000}
+                            message="There is no joke for that word"
+                        />
                     </Grid>
 
                     <Grid item xs={12}>
                         {loading && <CircularProgress size={24} />}
                         <List>
-                            {jokesList.map(jokes => (
+                            {jokesList.map((jokes) => (
                                 <ListItem
                                     className={classes.listItem}
                                     key={jokes}
