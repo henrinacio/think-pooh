@@ -146,6 +146,9 @@ export default function App() {
         setCategoryName(event.target.value);
     };
 
+    /**
+     * Funções para setar o fechamento da snackbar
+     */
     const handleClose = (event, reason) => {
         if (reason === 'clickaway') {
             return;
@@ -153,7 +156,7 @@ export default function App() {
         setOpenSnack(false);
     };
 
-    const handleAction = (
+    const action = (
         <Button size="small" onClick={handleClose}>
             X
         </Button>
@@ -319,7 +322,7 @@ export default function App() {
                             onClose={handleClose}
                             autoHideDuration={6000}
                             message="There is no joke for that word"
-                            action={handleAction}
+                            action={action}
                         />
                     </Grid>
 
