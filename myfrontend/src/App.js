@@ -18,11 +18,9 @@ import axios from "axios";
  * STYLE
  */
 const useStyles = makeStyles({
-  // estiliza o container
   container: {
     marginTop: "15%",
   },
-  // estiliza o botão que confirma a busca das jokes
   button: {
     left: "0px",
     right: "0px",
@@ -30,16 +28,13 @@ const useStyles = makeStyles({
     boxShadow: "0 3px 5px 0px rgba(0, 204, 126, 0.25)",
   },
   search: {},
-  // estiliza o input do componente de seleção de categorias
   select: {
     fontWeight: "700",
   },
-  // estiliza o paper do menu das categorias
   menuPaper: {
     maxHeight: 330,
     borderRadius: "10px",
   },
-  // estiliza o background do menu ao selecionar e passar por cima o mouse
   menu: {
     "&$selected": {
       backgroundColor: "transparent",
@@ -52,7 +47,6 @@ const useStyles = makeStyles({
     },
   },
   selected: {},
-  // estiliza o scroll globalmente
   "@global": {
     "*::-webkit-scrollbar": {
       width: "4px",
@@ -72,7 +66,6 @@ const useStyles = makeStyles({
       height: "5%",
     },
   },
-  // estiliza o item que recebe as jokes
   listItem: {
     paddingLeft: 0,
     paddingRight: 0,
@@ -148,8 +141,10 @@ export default function App() {
    * Function para buscar na API e setar a(s) joke(s)
    */
   async function handleAddJoke() {
-    // se não possuir inputs
     if (categoryName === "" && search === "") {
+      /**
+       * Busca sem inputs, retorna uma random joke
+       */
       await axios
         .get("/getRandom", {
           onDownloadProgress: setLoading(true),
@@ -162,9 +157,29 @@ export default function App() {
         .catch((err) => {
           console.log(err);
         });
-    }
-    // se possuir inputs e a categoria não for 'any'
-    else if (search && categoryName !== "any") {
+    } else if (search === "" && categoryName) {
+      /**
+       * Busca por categoria, retorna uma joke
+       */
+      await axios
+        .get("/getByCategory", {
+          params: {
+            category: categoryName,
+          },
+          onDownloadProgress: setLoading(true),
+        })
+        .then((response) => {
+          const joke = response.data.category_jokes;
+          setJokesList([joke]);
+          setLoading(false);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } else if (search && categoryName !== "any") {
+      /**
+       * Busca com input e categoria não sendo any
+       */
       await axios
         .get("/search", {
           params: {
@@ -181,9 +196,10 @@ export default function App() {
         .catch((err) => {
           console.log(err);
         });
-    }
-    // se possuir inputs e a categoria for 'any'
-    else if (search && categoryName === "any") {
+    } else if (search && categoryName === "any") {
+      /**
+       * Busca com input e categoria sendo any
+       */
       await axios
         .get("/search", {
           params: {
