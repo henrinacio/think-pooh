@@ -72,10 +72,11 @@ const useStyles = makeStyles({
     },
     snackWarning: {
         background: 'rgba(242, 207, 61, 1)',
-        color: 'black',
+        color: 'rgba(32, 35, 45, 1)',
         maxWidth: '312px',
         borderRadius: '10px',
         maxHeight: '71px',
+        boxShadow: 'none',
     },
 });
 
@@ -151,6 +152,12 @@ export default function App() {
         }
         setOpenSnack(false);
     };
+
+    const handleAction = (
+        <Button size="small" onClick={handleClose}>
+            X
+        </Button>
+    );
 
     /**
      * Function para buscar na API e setar a(s) joke(s)
@@ -308,14 +315,11 @@ export default function App() {
                                     root: classes.snackWarning,
                                 },
                             }}
-                            anchorOrigin={{
-                                vertical: 'bottom',
-                                horizontal: 'center',
-                            }}
                             open={openSnack}
                             onClose={handleClose}
                             autoHideDuration={6000}
                             message="There is no joke for that word"
+                            action={handleAction}
                         />
                     </Grid>
 
