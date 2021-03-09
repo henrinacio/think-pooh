@@ -11,13 +11,14 @@ import Button from "@material-ui/core/Button";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import axios from "axios";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 const useStyles = makeStyles({
   // estiliza o container
   container: {
-    marginTop: "20%",
+    marginTop: "15%",
   },
-  // estiliza o botão
+  // estiliza o botão que confirma a busca das jokes
   button: {
     left: "0px",
     right: "0px",
@@ -25,11 +26,11 @@ const useStyles = makeStyles({
     boxShadow: "0 3px 5px 0px rgba(0, 204, 126, 0.25)",
   },
   search: {},
-  // estiliza o input
+  // estiliza o input do componente de seleção de categorias
   select: {
     fontWeight: "700",
   },
-  // estiliza o paper do menu
+  // estiliza o paper do menu das categorias
   menuPaper: {
     maxHeight: 330,
     borderRadius: "10px",
@@ -67,7 +68,7 @@ const useStyles = makeStyles({
       height: "5%",
     },
   },
-  // estiliza o item da lista das jokes
+  // estiliza o item que recebe as jokes
   listItem: {
     paddingLeft: 0,
     paddingRight: 0,
@@ -77,14 +78,20 @@ const useStyles = makeStyles({
 export default function App() {
   // declaração para uso de estilos
   const classes = useStyles();
+
   // declaração para listar as categorias buscadas da API
   const [list, setList] = useState([]);
+
   // declaração para colocar as categorias no select
   const [categoryName, setCategoryName] = useState("");
+
   // declaração para realização da busca
   const [search, setSearch] = useState("");
+
   // declaração para listar as jokes após busca do usuário
   const [jokesList, setJokesList] = useState([]);
+
+  const [loading, setLoading] = useState(false);
 
   // busca e renderiza as categorias para serem colocadas no Select
   useEffect(() => {
@@ -124,10 +131,13 @@ export default function App() {
     // se não possuir inputs
     if (categoryName === "" && search === "") {
       await axios
-        .get("/getRandom")
+        .get("/getRandom", {
+          onDownloadProgress: setLoading(true),
+        })
         .then((response) => {
           const joke = response.data.random_joke;
           setJokesList([joke]);
+          setLoading(false);
         })
         .catch((err) => {
           console.log(err);
@@ -141,10 +151,12 @@ export default function App() {
             query: search,
             category: categoryName,
           },
+          onDownloadProgress: setLoading(true),
         })
         .then((response) => {
           const values = response.data.jokes.map((item) => item.value);
           setJokesList(values);
+          setLoading(false);
         })
         .catch((err) => {
           console.log(err);
@@ -158,10 +170,12 @@ export default function App() {
             query: search,
             category: "",
           },
+          onDownloadProgress: setLoading(true),
         })
         .then((response) => {
           const values = response.data.jokes.map((item) => item.value);
           setJokesList(values);
+          setLoading(false);
         })
         .catch((err) => {
           console.log(err);
@@ -224,6 +238,7 @@ export default function App() {
           </Grid>
 
           <Grid item xs={12}>
+            {loading && <CircularProgress size={24} />}
             <List>
               {jokesList.map((jokes) => (
                 <ListItem className={classes.listItem} key={jokes}>
