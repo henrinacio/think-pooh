@@ -13,6 +13,10 @@ import ListItem from "@material-ui/core/ListItem";
 import axios from "axios";
 
 const useStyles = makeStyles({
+  // estiliza o container
+  container: {
+    marginTop: "20%",
+  },
   // estiliza o botão
   button: {
     left: "0px",
@@ -25,6 +29,7 @@ const useStyles = makeStyles({
   select: {
     fontWeight: "700",
   },
+  // estiliza o paper do menu
   menuPaper: {
     maxHeight: 330,
     borderRadius: "10px",
@@ -62,14 +67,23 @@ const useStyles = makeStyles({
       height: "5%",
     },
   },
+  // estiliza o item da lista das jokes
+  listItem: {
+    paddingLeft: 0,
+    paddingRight: 0,
+  },
 });
 
 export default function App() {
+  // declaração para uso de estilos
   const classes = useStyles();
-
+  // declaração para listar as categorias buscadas da API
   const [list, setList] = useState([]);
+  // declaração para colocar as categorias no select
   const [categoryName, setCategoryName] = useState("");
+  // declaração para realização da busca
   const [search, setSearch] = useState("");
+  // declaração para listar as jokes após busca do usuário
   const [jokesList, setJokesList] = useState([]);
 
   // busca e renderiza as categorias para serem colocadas no Select
@@ -82,11 +96,12 @@ export default function App() {
         categories.unshift("any");
         setList(categories);
       })
-      .catch((e) => {
-        console.log(e.response.data);
+      .catch((err) => {
+        console.log(err);
       });
   }, []);
 
+  // declaração para setar a categoria como escolhida
   const handleChange = (event) => {
     setCategoryName(event.target.value);
   };
@@ -96,7 +111,7 @@ export default function App() {
     axios
       .get("/getRandom")
       .then((response) => {
-        const joke = response.data.ranm_joke;
+        const joke = response.data.random_joke;
         setJokesList([joke]);
       })
       .catch((err) => {
@@ -106,6 +121,7 @@ export default function App() {
 
   // função para renderizar as jokes
   async function handleAddJoke() {
+    // se não possuir inputs
     if (categoryName === "" && search === "") {
       await axios
         .get("/getRandom")
@@ -116,7 +132,9 @@ export default function App() {
         .catch((err) => {
           console.log(err);
         });
-    } else if (search && categoryName) {
+    }
+    // se possuir inputs e a categoria não for 'any'
+    else if (search && categoryName !== "any") {
       await axios
         .get("/search", {
           params: {
@@ -131,7 +149,9 @@ export default function App() {
         .catch((err) => {
           console.log(err);
         });
-    } else if (search && categoryName === "") {
+    }
+    // se possuir inputs e a categoria for 'any'
+    else if (search && categoryName === "any") {
       await axios
         .get("/search", {
           params: {
@@ -151,7 +171,7 @@ export default function App() {
 
   return (
     <div>
-      <Container maxWidth="sm">
+      <Container className={classes.container} maxWidth="sm">
         <Grid container spacing={3} style={{ textAlign: "center" }}>
           <Grid item xs={12} sm={6}>
             <TextField
@@ -206,7 +226,9 @@ export default function App() {
           <Grid item xs={12}>
             <List>
               {jokesList.map((jokes) => (
-                <ListItem key={jokes}>{jokes}</ListItem>
+                <ListItem className={classes.listItem} key={jokes}>
+                  {jokes}
+                </ListItem>
               ))}
             </List>
           </Grid>
