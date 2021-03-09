@@ -10,9 +10,13 @@ import MenuItem from "@material-ui/core/MenuItem";
 import Button from "@material-ui/core/Button";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
-import axios from "axios";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import Snackbar from "@material-ui/core/Snackbar";
+import axios from "axios";
 
+/**
+ * STYLE
+ */
 const useStyles = makeStyles({
   // estiliza o container
   container: {
@@ -75,25 +79,32 @@ const useStyles = makeStyles({
   },
 });
 
+/**
+ * APP
+ */
 export default function App() {
-  // declaração para uso de estilos
+  /**
+   * Declaração de:
+   *    classes de estilo;
+   *    variáveis de state;
+   * Variáveis de state:
+   *     para listar as categorias buscadas na API,
+   *     para colocar as categorias no Select component,
+   *     para realização de busca de palavras-chave,
+   *     para listar as jokes após pedido de busca do usuário,
+   *     para controlar o Circular Progress component,
+   *     para controlar o Snackbar component.
+   **/
   const classes = useStyles();
-
-  // declaração para listar as categorias buscadas da API
   const [list, setList] = useState([]);
-
-  // declaração para colocar as categorias no select
   const [categoryName, setCategoryName] = useState("");
-
-  // declaração para realização da busca
   const [search, setSearch] = useState("");
-
-  // declaração para listar as jokes após busca do usuário
   const [jokesList, setJokesList] = useState([]);
-
   const [loading, setLoading] = useState(false);
 
-  // busca e renderiza as categorias para serem colocadas no Select
+  /**
+   * Busca a lista de categórias na API e seta o state
+   */
   useEffect(() => {
     axios
       .get("/getCategories")
@@ -108,25 +119,34 @@ export default function App() {
       });
   }, []);
 
-  // declaração para setar a categoria como escolhida
-  const handleChange = (event) => {
-    setCategoryName(event.target.value);
-  };
-
-  // renderiza uma joke random ao inicializar a
+  /**
+   * Busca uma random joke na API e seta o state
+   */
   useEffect(() => {
     axios
-      .get("/getRandom")
+      .get("/getRandom", {
+        onDownloadProgress: setLoading(true),
+      })
       .then((response) => {
         const joke = response.data.random_joke;
         setJokesList([joke]);
+        setLoading(false);
       })
       .catch((err) => {
         console.log(err);
       });
   }, []);
 
-  // função para renderizar as jokes
+  /**
+   * Arrow function para setar a categoria escolhida
+   */
+  const handleChange = (event) => {
+    setCategoryName(event.target.value);
+  };
+
+  /**
+   * Function para buscar na API e setar a(s) joke(s)
+   */
   async function handleAddJoke() {
     // se não possuir inputs
     if (categoryName === "" && search === "") {
