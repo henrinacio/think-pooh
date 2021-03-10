@@ -344,7 +344,7 @@ export default function App() {
                     <Grid item xs={12}>
                         {loading && <CircularProgress size={24} />}
                     </Grid>
-                    <Grid item xs={12}></Grid>
+                    {/* <Grid item xs={12}></Grid> */}
                     <Grid container spacing={3} direction="column">
                         {jokesList.map((jokes) => (
                             <Grid
