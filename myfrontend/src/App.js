@@ -336,8 +336,8 @@ export default function App() {
                         alignItems="center"
                     >
                         {jokesList.map((jokes) => (
-                            <Grid item xs={12}>
-                                <Card key={jokes}>{jokes}</Card>
+                            <Grid item xs={12} key={jokes}>
+                                <Card>{jokes}</Card>
                             </Grid>
                         ))}
                     </Grid>
