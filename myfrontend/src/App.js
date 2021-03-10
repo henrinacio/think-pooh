@@ -81,7 +81,7 @@ const useStyles = makeStyles({
         margin: 'auto',
     },
     alignItemsAndJustifyContent: {
-        width: 600,
+        width: 550,
         minHeight: 150,
         padding: 50,
         display: 'flex',
