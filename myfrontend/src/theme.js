@@ -4,7 +4,7 @@ const theme = createMuiTheme({
     palette: {
         primary: { main: '#48CCCC' },
         secondary: { main: '#25EFA1' },
-        backgroundColor: '#fff',
+        background: { default: '#fff' },
     },
     typography: {
         fontFamily: ['Mulish'],

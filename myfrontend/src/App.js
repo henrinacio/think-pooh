@@ -74,9 +74,11 @@ const useStyles = makeStyles({
         maxHeight: '71px',
         boxShadow: 'none',
     },
-    listJokes: {
-        lineHeight: 21,
+    card: {
+        lineHeight: '21px',
         textAlign: 'center',
+        boxShadow: '0px 3px 12px 0 rgba(62, 69, 87, 0.25)',
+        borderRadius: '10px',
     },
 });
 
@@ -337,7 +339,7 @@ export default function App() {
                     >
                         {jokesList.map((jokes) => (
                             <Grid item xs={12} key={jokes}>
-                                <Card>{jokes}</Card>
+                                <Card className={classes.card}>{jokes}</Card>
                             </Grid>
                         ))}
                     </Grid>
