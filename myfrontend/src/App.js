@@ -8,13 +8,14 @@ import InputLabel from '@material-ui/core/InputLabel';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import Button from '@material-ui/core/Button';
-import Card from '@material-ui/core/Card';
+import Paper from '@material-ui/core/Paper';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Snackbar from '@material-ui/core/Snackbar';
 import IconButton from '@material-ui/core/Icon';
 import Icon from '@material-ui/core/Icon';
 import axios from 'axios';
 import theme from './theme';
+import Typography from '@material-ui/core/Typography';
 
 /**
  * STYLE
@@ -76,11 +77,18 @@ const useStyles = makeStyles({
         boxShadow: 'none',
         fontSize: 'small',
     },
-    card: {
-        lineHeight: '21px',
-        textAlign: 'center',
+    marginAutoItem: {
+        margin: 'auto',
+    },
+    alignItemsAndJustifyContent: {
+        width: 600,
+        minHeight: 150,
+        padding: 50,
+        display: 'flex',
         boxShadow: '0px 3px 12px 0 rgba(62, 69, 87, 0.25)',
         borderRadius: '10px',
+        alignItems: 'center',
+        justifyContent: 'center',
     },
 });
 
@@ -337,15 +345,23 @@ export default function App() {
                         {loading && <CircularProgress size={24} />}
                     </Grid>
                     <Grid item xs={12}></Grid>
-                    <Grid
-                        container
-                        direction="column"
-                        spacing={3}
-                        alignItems="center"
-                    >
+                    <Grid container spacing={3} direction="column">
                         {jokesList.map((jokes) => (
-                            <Grid item xs={12} key={jokes}>
-                                <Card className={classes.card}>{jokes}</Card>
+                            <Grid
+                                key={jokes}
+                                item
+                                xs={12}
+                                className={classes.marginAutoItem}
+                            >
+                                <Paper
+                                    className={
+                                        classes.alignItemsAndJustifyContent
+                                    }
+                                >
+                                    <Typography align="center">
+                                        {jokes}
+                                    </Typography>
+                                </Paper>
                             </Grid>
                         ))}
                     </Grid>
