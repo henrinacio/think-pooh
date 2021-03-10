@@ -11,6 +11,8 @@ import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Snackbar from '@material-ui/core/Snackbar';
+import IconButton from '@material-ui/core/Icon';
+import Icon from '@material-ui/core/Icon';
 import axios from 'axios';
 import theme from './theme';
 
@@ -69,10 +71,10 @@ const useStyles = makeStyles({
     snackWarning: {
         background: 'rgba(242, 207, 61, 1)',
         color: 'rgba(32, 35, 45, 1)',
-        maxWidth: '312px',
         borderRadius: '10px',
-        maxHeight: '71px',
+        textAlign: 'left',
         boxShadow: 'none',
+        fontSize: 'small',
     },
     card: {
         lineHeight: '21px',
@@ -159,9 +161,9 @@ export default function App() {
     };
 
     const action = (
-        <Button size="small" onClick={handleClose}>
-            X
-        </Button>
+        <IconButton size="small" onClick={handleClose}>
+            <Icon>close</Icon>
+        </IconButton>
     );
 
     /**
@@ -320,11 +322,15 @@ export default function App() {
                                     root: classes.snackWarning,
                                 },
                             }}
+                            anchorOrigin={{
+                                vertical: 'bottom',
+                                horizontal: 'left',
+                            }}
                             open={openSnack}
                             onClose={handleClose}
                             autoHideDuration={6000}
-                            message="Jokes not found."
                             action={action}
+                            message="No jokes found. Try search another word."
                         />
                     </Grid>
                     <Grid item xs={12}>
