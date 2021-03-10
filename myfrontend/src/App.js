@@ -8,18 +8,18 @@ import InputLabel from '@material-ui/core/InputLabel';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import Button from '@material-ui/core/Button';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
+import Card from '@material-ui/core/Card';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Snackbar from '@material-ui/core/Snackbar';
 import axios from 'axios';
+import theme from './theme';
 
 /**
  * STYLE
  */
 const useStyles = makeStyles({
-    container: {
-        marginTop: '15%',
+    root: {
+        margin: theme.spacing(10, 0, 3),
     },
     button: {
         left: '0px',
@@ -66,10 +66,6 @@ const useStyles = makeStyles({
             height: '5%',
         },
     },
-    listItem: {
-        paddingLeft: 0,
-        paddingRight: 0,
-    },
     snackWarning: {
         background: 'rgba(242, 207, 61, 1)',
         color: 'rgba(32, 35, 45, 1)',
@@ -77,6 +73,10 @@ const useStyles = makeStyles({
         borderRadius: '10px',
         maxHeight: '71px',
         boxShadow: 'none',
+    },
+    listJokes: {
+        lineHeight: 21,
+        textAlign: 'center',
     },
 });
 
@@ -259,8 +259,8 @@ export default function App() {
     }
 
     return (
-        <div>
-            <Container className={classes.container} maxWidth="sm">
+        <div className={classes.root}>
+            <Container maxWidth="sm">
                 <Grid container spacing={3} style={{ textAlign: 'center' }}>
                     <Grid item xs={12} sm={6}>
                         <TextField
@@ -321,23 +321,25 @@ export default function App() {
                             open={openSnack}
                             onClose={handleClose}
                             autoHideDuration={6000}
-                            message="There is no joke for that word"
+                            message="Jokes not found."
                             action={action}
                         />
                     </Grid>
-
                     <Grid item xs={12}>
                         {loading && <CircularProgress size={24} />}
-                        <List>
-                            {jokesList.map((jokes) => (
-                                <ListItem
-                                    className={classes.listItem}
-                                    key={jokes}
-                                >
-                                    {jokes}
-                                </ListItem>
-                            ))}
-                        </List>
+                    </Grid>
+                    <Grid item xs={12}></Grid>
+                    <Grid
+                        container
+                        direction="column"
+                        spacing={3}
+                        alignItems="center"
+                    >
+                        {jokesList.map((jokes) => (
+                            <Grid item xs={12}>
+                                <Card key={jokes}>{jokes}</Card>
+                            </Grid>
+                        ))}
                     </Grid>
                 </Grid>
             </Container>
