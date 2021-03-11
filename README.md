@@ -1,6 +1,11 @@
+
+<p align="center">
+  <img alt="Layout" src=".github/layout.png" width="100%">
+</p>
+
 ## 💻 Project
 
-The aim of this project is to solve a fullstack challenge by fetching API data on a React app.
+The aim of this project is to solve a fullstack challenge by fetching [Chuck Norris API](https://api.chucknorris.io/) data on a React app.
 
 ## 🚀 Technologies
 
