@@ -81,7 +81,7 @@ const useStyles = makeStyles({
         margin: 'auto',
     },
     alignItemsAndJustifyContent: {
-        width: 550,
+        maxWidth: 550,
         minHeight: 150,
         padding: 50,
         display: 'flex',
@@ -122,13 +122,13 @@ export default function App() {
     useEffect(() => {
         axios
             .get('/getCategories')
-            .then((response) => {
+            .then(response => {
                 setList(response.data.categories);
                 let categories = response.data.categories;
                 categories.unshift('any');
                 setList(categories);
             })
-            .catch((err) => {
+            .catch(err => {
                 console.log(err);
             });
     }, []);
@@ -141,12 +141,12 @@ export default function App() {
             .get('/getRandom', {
                 onDownloadProgress: setLoading(true),
             })
-            .then((response) => {
+            .then(response => {
                 const joke = response.data.random_joke;
                 setJokesList([joke]);
                 setLoading(false);
             })
-            .catch((err) => {
+            .catch(err => {
                 console.log(err);
             });
     }, []);
@@ -154,7 +154,7 @@ export default function App() {
     /**
      * Arrow function para setar a categoria escolhida
      */
-    const handleChange = (event) => {
+    const handleChange = event => {
         setCategoryName(event.target.value);
     };
 
@@ -186,12 +186,12 @@ export default function App() {
                 .get('/getRandom', {
                     onDownloadProgress: setLoading(true),
                 })
-                .then((response) => {
+                .then(response => {
                     const joke = response.data.random_joke;
                     setJokesList([joke]);
                     setLoading(false);
                 })
-                .catch((err) => {
+                .catch(err => {
                     console.log(err);
                 });
         } else if (search === '' && categoryName) {
@@ -205,12 +205,12 @@ export default function App() {
                     },
                     onDownloadProgress: setLoading(true),
                 })
-                .then((response) => {
+                .then(response => {
                     const joke = response.data.category_jokes;
                     setJokesList([joke]);
                     setLoading(false);
                 })
-                .catch((err) => {
+                .catch(err => {
                     console.log(err);
                 });
         } else if (search && categoryName !== 'any') {
@@ -225,10 +225,8 @@ export default function App() {
                     },
                     onDownloadProgress: setLoading(true),
                 })
-                .then((response) => {
-                    const values = response.data.jokes.map(
-                        (item) => item.value,
-                    );
+                .then(response => {
+                    const values = response.data.jokes.map(item => item.value);
                     if (values.length !== 0) {
                         setJokesList(values);
                         setLoading(false);
@@ -237,7 +235,7 @@ export default function App() {
                         setLoading(false);
                     }
                 })
-                .catch((err) => {
+                .catch(err => {
                     console.log(err);
                 });
         } else if (search && categoryName === 'any') {
@@ -252,10 +250,8 @@ export default function App() {
                     },
                     onDownloadProgress: setLoading(true),
                 })
-                .then((response) => {
-                    const values = response.data.jokes.map(
-                        (item) => item.value,
-                    );
+                .then(response => {
+                    const values = response.data.jokes.map(item => item.value);
                     if (values.length !== 0) {
                         setJokesList(values);
                         setLoading(false);
@@ -264,7 +260,7 @@ export default function App() {
                         setLoading(false);
                     }
                 })
-                .catch((err) => {
+                .catch(err => {
                     console.log(err);
                 });
         }
@@ -281,7 +277,7 @@ export default function App() {
                             id="search"
                             label="Search"
                             value={search}
-                            onChange={(e) => setSearch(e.target.value)}
+                            onChange={e => setSearch(e.target.value)}
                         ></TextField>
                     </Grid>
                     <Grid item xs={12} sm={6} style={{ textAlign: 'left' }}>
@@ -299,7 +295,7 @@ export default function App() {
                                     classes: { paper: classes.menuPaper },
                                 }}
                             >
-                                {list.map((item) => (
+                                {list.map(item => (
                                     <MenuItem
                                         key={item}
                                         value={item}
@@ -345,8 +341,13 @@ export default function App() {
                         {loading && <CircularProgress size={24} />}
                     </Grid>
                     {/* <Grid item xs={12}></Grid> */}
-                    <Grid container spacing={3} direction="column">
-                        {jokesList.map((jokes) => (
+                    <Grid
+                        container
+                        spacing={3}
+                        direction="column"
+                        style={{ margin: 'auto' }}
+                    >
+                        {jokesList.map(jokes => (
                             <Grid
                                 key={jokes}
                                 item
