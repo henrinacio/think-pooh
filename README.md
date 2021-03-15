@@ -37,7 +37,7 @@ git clone https://github.com/Henrinacio/react-node-chuck-challenge.git
 
 Initialize project inside both folders (myfrontend and mybackend)
 ```sh
-yarn init -y
+yarn install
 ```
 
 ## :art: Back-end & Front-end
