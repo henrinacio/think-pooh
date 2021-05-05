@@ -1,26 +1,29 @@
 import React, { useEffect, useState } from 'react';
+
+import { getCategories, getRandomJoke, getJokeByCategory, getJokesBySearch } from './core/api'
+
 import { makeStyles } from '@material-ui/core/styles';
-import Container from '@material-ui/core/Container';
-import Grid from '@material-ui/core/Grid';
-import TextField from '@material-ui/core/TextField';
-import FormControl from '@material-ui/core/FormControl';
-import InputLabel from '@material-ui/core/InputLabel';
-import Select from '@material-ui/core/Select';
-import MenuItem from '@material-ui/core/MenuItem';
-import Button from '@material-ui/core/Button';
-import Paper from '@material-ui/core/Paper';
-import CircularProgress from '@material-ui/core/CircularProgress';
-import Snackbar from '@material-ui/core/Snackbar';
-import IconButton from '@material-ui/core/Icon';
-import Icon from '@material-ui/core/Icon';
-import axios from 'axios';
-import theme from './theme';
-import Typography from '@material-ui/core/Typography';
+import {
+    Container,
+    Grid,
+    TextField,
+    FormControl,
+    InputLabel,
+    Select,
+    MenuItem,
+    Button,
+    Paper,
+    CircularProgress,
+    Snackbar,
+    IconButton,
+    Icon,
+    Typography
+} from '@material-ui/core';
 
 /**
  * STYLE
  */
-const useStyles = makeStyles({
+const useStyles = makeStyles(theme => ({
     root: {
         margin: theme.spacing(10, 0, 3),
     },
@@ -30,7 +33,6 @@ const useStyles = makeStyles({
         height: '40px',
         boxShadow: '0 3px 5px 0px rgba(0, 204, 126, 0.25)',
     },
-    search: {},
     select: {
         fontWeight: '700',
     },
@@ -49,7 +51,6 @@ const useStyles = makeStyles({
             backgroundColor: '#DAF1F2',
         },
     },
-    selected: {},
     '@global': {
         '*::-webkit-scrollbar': {
             width: '4px',
@@ -77,37 +78,23 @@ const useStyles = makeStyles({
         boxShadow: 'none',
         fontSize: 'small',
     },
-    marginAutoItem: {
-        margin: 'auto',
-    },
-    alignItemsAndJustifyContent: {
+    paper: {
         maxWidth: 550,
         minHeight: 150,
         padding: 50,
+        margin: '0 16px',
         display: 'flex',
         boxShadow: '0px 3px 12px 0 rgba(62, 69, 87, 0.25)',
         borderRadius: '10px',
         alignItems: 'center',
         justifyContent: 'center',
     },
-});
+}));
 
 /**
  * APP
  */
 export default function App() {
-    /**
-     * Declaração de:
-     *    classes de estilo;
-     *    variáveis de state;
-     * Variáveis de state:
-     *     para listar as categorias buscadas na API,
-     *     para colocar as categorias no Select component,
-     *     para realização de busca de palavras-chave,
-     *     para listar as jokes após pedido de busca do usuário,
-     *     para controlar o Circular Progress component,
-     *     para controlar o Snackbar component.
-     **/
     const classes = useStyles();
     const [list, setList] = useState([]);
     const [categoryName, setCategoryName] = useState('');
@@ -116,51 +103,29 @@ export default function App() {
     const [loading, setLoading] = useState(false);
     const [openSnack, setOpenSnack] = useState(false);
 
-    /**
-     * Busca a lista de categórias na API e seta o state
-     */
     useEffect(() => {
-        axios
-            .get('/getCategories')
-            .then(response => {
-                setList(response.data.categories);
-                let categories = response.data.categories;
-                categories.unshift('any');
-                setList(categories);
-            })
-            .catch(err => {
-                console.log(err);
-            });
+        getCategories().then(data => setList(['any', ...data]))
     }, []);
 
-    /**
-     * Busca uma random joke na API e seta o state
-     */
     useEffect(() => {
-        axios
-            .get('/getRandom', {
-                onDownloadProgress: setLoading(true),
-            })
-            .then(response => {
-                const joke = response.data.random_joke;
+        setLoading(true)
+        getRandomJoke()
+            .then(joke => {
                 setJokesList([joke]);
-                setLoading(false);
             })
-            .catch(err => {
-                console.log(err);
-            });
+            .finally(() => {
+                setLoading(false)
+            })
     }, []);
 
-    /**
-     * Arrow function para setar a categoria escolhida
-     */
-    const handleChange = event => {
+    const handleCategoryChange = event => {
         setCategoryName(event.target.value);
     };
 
-    /**
-     * Funções para setar o fechamento da snackbar
-     */
+    const handleSearchChange = event => {
+        setSearch(event.target.value);
+    };
+
     const handleClose = (event, reason) => {
         if (reason === 'clickaway') {
             return;
@@ -168,102 +133,46 @@ export default function App() {
         setOpenSnack(false);
     };
 
-    const action = (
+    const Action = (
         <IconButton size="small" onClick={handleClose}>
             <Icon>close</Icon>
         </IconButton>
     );
 
-    /**
-     * Function para buscar na API e setar a(s) joke(s)
-     */
-    async function handleAddJoke() {
-        if (categoryName === '' && search === '') {
-            /**
-             * Busca sem inputs, retorna uma random joke
-             */
-            await axios
-                .get('/getRandom', {
-                    onDownloadProgress: setLoading(true),
-                })
-                .then(response => {
-                    const joke = response.data.random_joke;
+    const handleAddJoke = () => {
+        setLoading(true)
+
+        if (!search && (categoryName === 'any' || !categoryName)) {
+            return getRandomJoke()
+                .then(joke => {
                     setJokesList([joke]);
-                    setLoading(false);
                 })
-                .catch(err => {
-                    console.log(err);
-                });
-        } else if (search === '' && categoryName) {
-            /**
-             * Busca sem inputs, por categoria, retorna uma random joke
-             */
-            await axios
-                .get('/getByCategory', {
-                    params: {
-                        category: categoryName,
-                    },
-                    onDownloadProgress: setLoading(true),
+                .finally(() => {
+                    setLoading(false)
                 })
-                .then(response => {
-                    const joke = response.data.category_jokes;
-                    setJokesList([joke]);
-                    setLoading(false);
-                })
-                .catch(err => {
-                    console.log(err);
-                });
-        } else if (search && categoryName !== 'any') {
-            /**
-             * Busca com input e categoria não sendo any
-             */
-            await axios
-                .get('/search', {
-                    params: {
-                        query: search,
-                        category: categoryName,
-                    },
-                    onDownloadProgress: setLoading(true),
-                })
-                .then(response => {
-                    const values = response.data.jokes.map(item => item.value);
-                    if (values.length !== 0) {
-                        setJokesList(values);
-                        setLoading(false);
-                    } else {
-                        setOpenSnack(true);
-                        setLoading(false);
-                    }
-                })
-                .catch(err => {
-                    console.log(err);
-                });
-        } else if (search && categoryName === 'any') {
-            /**
-             * Busca com input e categoria sendo any
-             */
-            await axios
-                .get('/search', {
-                    params: {
-                        query: search,
-                        category: '',
-                    },
-                    onDownloadProgress: setLoading(true),
-                })
-                .then(response => {
-                    const values = response.data.jokes.map(item => item.value);
-                    if (values.length !== 0) {
-                        setJokesList(values);
-                        setLoading(false);
-                    } else {
-                        setOpenSnack(true);
-                        setLoading(false);
-                    }
-                })
-                .catch(err => {
-                    console.log(err);
-                });
         }
+        
+        if (!search && categoryName) {
+            return getJokeByCategory(categoryName)
+                .then(joke => setJokesList([joke]))
+                .finally(() => {
+                    setLoading(false)
+                })
+        }
+        
+        return getJokesBySearch(search, categoryName)
+            .then(jokes => {
+                const values = jokes.map(item => item.value)
+
+                if (!values.length) {
+                    setOpenSnack(true)
+                } else {
+                    setJokesList(values)
+                }
+            })
+            .finally(() => {
+                setLoading(false)
+            })
     }
 
     return (
@@ -272,16 +181,15 @@ export default function App() {
                 <Grid container spacing={3} style={{ textAlign: 'center' }}>
                     <Grid item xs={12} sm={6}>
                         <TextField
-                            className={classes.search}
-                            fullWidth={true}
+                            fullWidth
                             id="search"
                             label="Search"
                             value={search}
-                            onChange={e => setSearch(e.target.value)}
-                        ></TextField>
+                            onChange={handleSearchChange}
+                        />
                     </Grid>
-                    <Grid item xs={12} sm={6} style={{ textAlign: 'left' }}>
-                        <FormControl fullWidth={true}>
+                    <Grid item xs={12} sm={6}>
+                        <FormControl fullWidth>
                             <InputLabel id="category-label">
                                 Category
                             </InputLabel>
@@ -290,7 +198,7 @@ export default function App() {
                                 labelId="category-label"
                                 id="category"
                                 value={categoryName}
-                                onChange={handleChange}
+                                onChange={handleCategoryChange}
                                 MenuProps={{
                                     classes: { paper: classes.menuPaper },
                                 }}
@@ -299,10 +207,7 @@ export default function App() {
                                     <MenuItem
                                         key={item}
                                         value={item}
-                                        classes={{
-                                            root: classes.menu,
-                                            selected: classes.selected,
-                                        }}
+                                        classes={{ root: classes.menu }}
                                     >
                                         {item}
                                     </MenuItem>
@@ -333,32 +238,17 @@ export default function App() {
                             open={openSnack}
                             onClose={handleClose}
                             autoHideDuration={6000}
-                            action={action}
+                            action={Action}
                             message="No jokes found. Try search another word."
                         />
                     </Grid>
                     <Grid item xs={12}>
                         {loading && <CircularProgress size={24} />}
                     </Grid>
-                    {/* <Grid item xs={12}></Grid> */}
-                    <Grid
-                        container
-                        spacing={3}
-                        direction="column"
-                        style={{ margin: 'auto' }}
-                    >
+                    <Grid container spacing={3} direction="column">
                         {jokesList.map(jokes => (
-                            <Grid
-                                key={jokes}
-                                item
-                                xs={12}
-                                className={classes.marginAutoItem}
-                            >
-                                <Paper
-                                    className={
-                                        classes.alignItemsAndJustifyContent
-                                    }
-                                >
+                            <Grid key={jokes} item xs={12}>
+                                <Paper className={ classes.paper }>
                                     <Typography align="center">
                                         {jokes}
                                     </Typography>

@@ -1,7 +1,9 @@
 const express = require('express');
-var request = require('request');
+const request = require('request');
 const app = express();
 const port = 5000;
+
+const jokesApiUrl = 'https://api.chucknorris.io/jokes'
 
 app.get('/', (req, res) => {
     res.send('Hello World!');
@@ -9,10 +11,10 @@ app.get('/', (req, res) => {
 
 app.get('/getCategories', (req, res) => {
     request(
-        `https://api.chucknorris.io/jokes/categories`,
+        `${jokesApiUrl}/categories`,
         function (error, response, body) {
-            if (!error && response.statusCode == 200) {
-                var categories = JSON.parse(body);
+            if (!error && response.statusCode === 200) {
+                const categories = JSON.parse(body);
                 res.send({ categories });
             }
         },
@@ -21,11 +23,10 @@ app.get('/getCategories', (req, res) => {
 
 app.get('/getRandom', (req, res) => {
     request(
-        `https://api.chucknorris.io/jokes/random`,
+        `${jokesApiUrl}/random`,
         function (error, response, body) {
-            if (!error && response.statusCode == 200) {
-                var parsedBody = JSON.parse(body);
-                var random_joke = parsedBody['value'];
+            if (!error && response.statusCode === 200) {
+                const { value: random_joke } = JSON.parse(body);
                 res.send({ random_joke });
             }
         },
@@ -35,11 +36,10 @@ app.get('/getRandom', (req, res) => {
 app.get('/getByCategory', (req, res) => {
     const { category } = req.query;
     request(
-        `https://api.chucknorris.io/jokes/random?category=${category}`,
+        `${jokesApiUrl}/random?category=${category}`,
         function (err, response, body) {
-            if (!err && response.statusCode == 200) {
-                var parsedBody = JSON.parse(body);
-                var category_jokes = parsedBody['value'];
+            if (!err && response.statusCode === 200) {
+                const { value: category_jokes } = JSON.parse(body);
                 res.send({ category_jokes });
             }
         },
@@ -49,16 +49,11 @@ app.get('/getByCategory', (req, res) => {
 app.get('/search', (req, res) => {
     const { query, category } = req.query;
     request(
-        `https://api.chucknorris.io/jokes/search?query=${query}`,
+        `${jokesApiUrl}/search?query=${query}`,
         function (err, response, body) {
-            if (!err && response.statusCode == 200) {
-                var parsedBody = JSON.parse(body);
-                var jokes = [];
-                category
-                    ? (jokes = parsedBody['result'].filter(
-                          value => value.categories == category,
-                      ))
-                    : (jokes = parsedBody['result']);
+            if (!err && response.statusCode === 200) {
+                const { result } = JSON.parse(body);
+                const jokes = !category ? result : result.filter(value => value.categories === category)
                 res.send({ jokes });
             }
         },
